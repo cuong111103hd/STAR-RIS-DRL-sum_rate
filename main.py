@@ -34,6 +34,10 @@ if __name__ == "__main__":
     parser.add_argument("--num_antennas", default=4, type=int, metavar='N', help='Number of antennas in the BS (default: 4)')
     parser.add_argument("--num_RIS_elements", default=4, type=int, metavar='N', help='Number of RIS elements (default: 4)')
     parser.add_argument("--num_users", default=4, type=int, metavar='N', help='Number of users (default: 4)')
+    parser.add_argument("--num_elements_T", default=2, type=int, metavar='N',help='Number of antennas in the BS (default: 4)')
+    parser.add_argument("--num_elements_R", default=2, type=int, metavar='N', help='Number of STAR-RIS elements (default: 2)')
+    parser.add_argument("--num_user_T", default=4, type=int, metavar='N', help='Number of users (default: 4)')
+    parser.add_argument("--num_user_R", default=4, type=int, metavar='N', help='Number of users (default: 4)')
     parser.add_argument("--power_t", default=30, type=float, metavar='N', help='Transmission power for the constrained optimization (in dBm, default: 30)')
     parser.add_argument("--awgn_var", default=1e-2, type=float, metavar='G', help='Variance of the additive white Gaussian noise (default: 0.01)')
     parser.add_argument("--channel_noise_var", default=1e-2, type=float, metavar='G', help='Variance of the noise in the cascaded channels (default: 0.01)')
@@ -63,9 +67,6 @@ if __name__ == "__main__":
     parser.add_argument("--exp_regularization_term", default=0.3, type=float, metavar='G', help='Initial value for the exploration regularization term (default: 0.3)')
     parser.add_argument("--linear_schedule_exp_regularization", default=True, type=bool, metavar='G', help='Linearly schedule exploration regularization term')
     args = parser.parse_args()
-
-
-
 
 
     print("-----------------------------------------------------------------------------")
