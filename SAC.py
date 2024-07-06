@@ -64,7 +64,7 @@ class Critic(nn.Module):
 
 
 class GaussianPolicy(nn.Module):
-    def __init__(self, num_inputs, num_actions, hidden_dim, M, N, K, power_t, device, action_space=None):
+    def __init__(self, num_inputs, num_actions, hidden_dim, M, L, K, power_t, device, action_space=None):
         super(GaussianPolicy, self).__init__()
 
         self.device = device
@@ -78,7 +78,7 @@ class GaussianPolicy(nn.Module):
         self.apply(weights_init_)
 
         self.M = M
-        self.N = N
+        self.L = L
         self.K = K
         self.power_t = power_t
 
@@ -185,11 +185,11 @@ class GaussianPolicy(nn.Module):
 
         real_normal1, imag_normal1, real_normal2, imag_normal2 = self.compute_phase(action.detach())
 
-        real_normal1 = real_normal1.expand(-1, self.N)
-        imag_normal1 = imag_normal1.expand(-1, self.N)
+        real_normal1 = real_normal1.expand(-1, self.L)
+        imag_normal1 = imag_normal1.expand(-1, self.L)
 
-        real_normal2 = real_normal2.expand(-1, self.N)
-        imag_normal2 = imag_normal2.expand(-1, self.N)
+        real_normal2 = real_normal2.expand(-1, self.L)
+        imag_normal2 = imag_normal2.expand(-1, self.L)
 
         division_term = torch.cat([current_power_t, real_normal1, imag_normal1, real_normal2, imag_normal2], dim=1)
 
@@ -207,7 +207,7 @@ class SAC(object):
     def __init__(self, state_dim,
                  action_space,
                  M,
-                 N,
+                 L,
                  K,
                  power_t,
                  actor_lr,
@@ -252,7 +252,7 @@ class SAC(object):
             self.log_alpha = torch.zeros(1, requires_grad=True, device=self.device)
             self.alpha_optim = Adam([self.log_alpha], lr=actor_lr)
 
-        self.actor = GaussianPolicy(state_dim, action_space.shape[0], hidden_size, M, N, K, power_t, self.device).to(self.device)
+        self.actor = GaussianPolicy(state_dim, action_space.shape[0], hidden_size, M, L, K, power_t, self.device).to(self.device)
         self.actor_optimizer = Adam(self.actor.parameters(), lr=actor_lr)
 
     def select_action(self, state, evaluate=False):

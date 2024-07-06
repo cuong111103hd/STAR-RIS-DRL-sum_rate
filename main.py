@@ -84,17 +84,17 @@ if __name__ == "__main__":
 
     environment_kwargs = {
         "num_antennas": args.num_antennas,
-        "num_RIS_elements": args.num_RIS_elements,
+        "num_STAR_elements": args.num_STAR_elements,
         "num_users": args.num_users,
-        "mismatch": args.mismatch,
+        "num_elements_T": args.num_elements_T,
+        "num_elements_R": args.num_elements_R,
+        "num_user_T": args.num_user_T,
+        "num_user_R": args.num_user_R,
         "channel_est_error": args.channel_est_error,
-        "cascaded_channels": args.cascaded_channels,
-        "beta_min": args.beta_min,
-        "theta_bar": args.theta_bar,
-        "kappa_bar": args.kappa_bar,
         "AWGN_var": args.awgn_var,
         "channel_noise_var": args.channel_noise_var,
         "seed": args.seed,
+
     }
 
     env = gym.make(args.env, **environment_kwargs)
@@ -113,7 +113,7 @@ if __name__ == "__main__":
         "state_dim": state_dim,
         "action_space": env.action_space,
         "M": args.num_antennas,
-        "N": args.num_RIS_elements,
+        "L": args.num_RIS_elements,
         "K": args.num_users,
         "power_t": args.power_t,
         "actor_lr": args.actor_lr,
