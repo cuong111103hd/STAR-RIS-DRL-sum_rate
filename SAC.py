@@ -181,14 +181,17 @@ class GaussianPolicy(nn.Module):
         mean = torch.tanh(mean) * self.action_scale + self.action_bias
 
         # Normalize the transmission power and phase matrix
-        current_power_t = self.compute_power(action.detach()).expand(-1, 2 * self.M ** 2) / np.sqrt(self.power_t)
+        current_power_t = self.compute_power(action.detach()).expand(-1, 2 * self.M * self.K) / np.sqrt(self.power_t)
 
-        real_normal, imag_normal = self.compute_phase(action.detach())
+        real_normal1, imag_normal1, real_normal2, imag_normal2 = self.compute_phase(action.detach())
 
-        real_normal = real_normal.expand(-1, self.N)
-        imag_normal = imag_normal.expand(-1, self.N)
+        real_normal1 = real_normal1.expand(-1, self.N)
+        imag_normal1 = imag_normal1.expand(-1, self.N)
 
-        division_term = torch.cat([current_power_t, real_normal, imag_normal], dim=1)
+        real_normal2 = real_normal2.expand(-1, self.N)
+        imag_normal2 = imag_normal2.expand(-1, self.N)
+
+        division_term = torch.cat([current_power_t, real_normal1, imag_normal1, real_normal2, imag_normal2], dim=1)
 
         action /= division_term
 

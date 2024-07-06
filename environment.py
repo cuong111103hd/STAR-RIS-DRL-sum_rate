@@ -1,5 +1,5 @@
 import math
-import gymnasium as gym
+import gym
 from gym import spaces
 import numpy as np
 import os
