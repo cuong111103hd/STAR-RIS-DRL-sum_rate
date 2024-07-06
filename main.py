@@ -145,7 +145,7 @@ if __name__ == "__main__":
     state, done = env.reset(), False
 
     max_reward = 0
-    max_mismatch_reward = 0
+    # max_mismatch_reward = 0
 
     episode_time_steps = 0
     episode_num = 0
@@ -172,18 +172,18 @@ if __name__ == "__main__":
         #     next_state, reward, done, info = env.step(action)
         next_state, reward, done, info = env.step(action)
 
-        mismatch_reward = info["true reward"]
+        # mismatch_reward = info["true reward"]
 
         next_state = whiten(next_state)
 
         instant_rewards.append(reward)
-        instant_mismatch_rewards.append(mismatch_reward)
+        # instant_mismatch_rewards.append(mismatch_reward)
 
         if reward > max_reward:
             max_reward = reward
 
-        if mismatch_reward > max_mismatch_reward:
-            max_mismatch_reward = mismatch_reward
+        # if mismatch_reward > max_mismatch_reward:
+        #     max_mismatch_reward = mismatch_reward
 
         reward = reward - np.mean(instant_rewards)
 
@@ -197,18 +197,19 @@ if __name__ == "__main__":
         state = next_state
 
         if (t + 1) % 100 == 0:
-            print(f"Time step: {t + 1} Max. Reward: {max_reward:.3f} Max. Mismatch Reward: {max_mismatch_reward:.3f}")
+            print(f"Time step: {t + 1} Max. Reward: {max_reward:.3f} ")
 
-            np.save(f"./Results/{save_path}/{file_name}", instant_mismatch_rewards)
+            # np.save(f"./Results/{save_path}/{file_name}", instant_mismatch_rewards)
 
             if args.save_model:
                 agent.save(f"./Models/{save_path}/{file_name}")
 
         # Train the agent after collecting sufficient samples
-        if "Beta_Space" in args.policy:
-            agent.update_parameters(replay_buffer, exp_regularization, args.batch_size)
-        else:
-            agent.update_parameters(replay_buffer, args.batch_size)
+        # if "Beta_Space" in args.policy:
+        #     agent.update_parameters(replay_buffer, exp_regularization, args.batch_size)
+        # else:
+        #     agent.update_parameters(replay_buffer, args.batch_size)
+        agent.update_parameters(replay_buffer, args.batch_size)
 
         if args.linear_schedule_exp_regularization:
             exp_regularization = args.exp_regularization_term - (args.exp_regularization_term * (t / args.max_time_steps))
